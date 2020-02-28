@@ -1,0 +1,16 @@
+name: local_auth_example
+description: Demonstrates how to use the local_auth plugin.
+
+dependencies:
+  flutter:
+    sdk: flutter
+  local_auth:
+    path: ../
+
+dev_dependencies:
+  e2e: ^0.2.1
+  flutter_driver:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
