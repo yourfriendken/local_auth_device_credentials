@@ -2,6 +2,8 @@
 
 * Add `authenticate` method that uses biometric authentication, but allows users to also use device authentication - pin, pattern, passcode.
 
+## From [local_auth](https://github.com/flutter/plugins/tree/master/packages/package_info)
+
 ## 0.6.1+2
 
 * Support v2 embedding.
