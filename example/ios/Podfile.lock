@@ -4,14 +4,14 @@ PODS:
   - Flutter (1.0.0)
   - flutter_plugin_android_lifecycle (0.0.1):
     - Flutter
-  - local_auth (0.0.1):
+  - local_auth_device_credentials (0.0.1):
     - Flutter
 
 DEPENDENCIES:
   - e2e (from `.symlinks/plugins/e2e/ios`)
   - Flutter (from `.symlinks/flutter/ios`)
   - flutter_plugin_android_lifecycle (from `.symlinks/plugins/flutter_plugin_android_lifecycle/ios`)
-  - local_auth (from `.symlinks/plugins/local_auth/ios`)
+  - local_auth_device_credentials (from `.symlinks/plugins/local_auth_device_credentials/ios`)
 
 EXTERNAL SOURCES:
   e2e:
@@ -20,14 +20,14 @@ EXTERNAL SOURCES:
     :path: ".symlinks/flutter/ios"
   flutter_plugin_android_lifecycle:
     :path: ".symlinks/plugins/flutter_plugin_android_lifecycle/ios"
-  local_auth:
-    :path: ".symlinks/plugins/local_auth/ios"
+  local_auth_device_credentials:
+    :path: ".symlinks/plugins/local_auth_device_credentials/ios"
 
 SPEC CHECKSUMS:
   e2e: 967b9b1fc533b7636a3b7a719f840c27f301fe1f
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_plugin_android_lifecycle: 47de533a02850f070f5696a623995e93eddcdb9b
-  local_auth: 2571c49920ae469f46d5557435fad8fa473a5e88
+  local_auth_device_credentials: 7ea08f7e3a5cd32bd628d1f8ee60e22f9d78f668
 
 PODFILE CHECKSUM: 7fb83752f59ead6285236625b82473f90b1cb932
 
