@@ -1,3 +1,13 @@
+# Change log
+
+## 0.6.2+2
+
+* Update auth string to be more generic
+
+## 0.6.2+1
+
+* Fix bug with package name
+
 ## 0.6.2
 
 * Add `authenticate` method that uses biometric authentication, but allows users to also use device authentication - pin, pattern, passcode.

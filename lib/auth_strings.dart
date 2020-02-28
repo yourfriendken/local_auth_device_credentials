@@ -80,7 +80,7 @@ class IOSAuthMessages {
 
 // Strings for local_authentication plugin. Currently supports English.
 // Intl.message must be string literals.
-String get androidFingerprintHint => Intl.message('Touch sensor',
+String get androidFingerprintHint => Intl.message('Verify identity',
     desc: 'Hint message advising the user how to scan their fingerprint. It is '
         'used on Android side. Maximum 60 characters.');
 
@@ -97,7 +97,7 @@ String get androidCancelButton => Intl.message('Cancel',
     desc: 'Message showed on a button that the user can click to leave the '
         'current dialog. It is used on Android side. Maximum 30 characters.');
 
-String get androidSignInTitle => Intl.message('Fingerprint Authentication',
+String get androidSignInTitle => Intl.message('Authentication required',
     desc: 'Message showed as a title in a dialog which indicates the user '
         'that they need to scan fingerprint to continue. It is used on '
         'Android side. Maximum 60 characters.');
