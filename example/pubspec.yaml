@@ -4,7 +4,7 @@ description: Demonstrates how to use the local_auth plugin.
 dependencies:
   flutter:
     sdk: flutter
-  local_auth:
+  local_auth_device_credentials:
     path: ../
 
 dev_dependencies:

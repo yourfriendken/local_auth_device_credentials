@@ -8,7 +8,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:local_auth/local_auth.dart';
+import 'package:local_auth_device_credentials/local_auth.dart';
 
 void main() {
   runApp(MyApp());
