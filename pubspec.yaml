@@ -1,6 +1,7 @@
 name: local_auth_device_credentials
 description: Flutter plugin for Android and iOS device authentication sensors
   such as Fingerprint Reader, Touch ID, pin, pattern, or passcode.
+author: Your friend ken <pub.dev@kennethdjones.com>
 homepage: https://github.com/yourfriendken/local_auth_device_credentials
 version: 0.6.2
 
@@ -17,7 +18,7 @@ dependencies:
   flutter:
     sdk: flutter
   meta: ^1.0.5
-  intl: ">=0.15.1 <0.17.0"
+  intl: '>=0.15.1 <0.17.0'
   platform: ^2.0.0
   flutter_plugin_android_lifecycle: ^1.0.2
 
@@ -29,5 +30,5 @@ dev_dependencies:
     sdk: flutter
 
 environment:
-  sdk: ">=2.0.0-dev.28.0 <3.0.0"
-  flutter: ">=1.10.0 <2.0.0"
+  sdk: '>=2.0.0-dev.28.0 <3.0.0'
+  flutter: '>=1.10.0 <2.0.0'
