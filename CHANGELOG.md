@@ -1,5 +1,10 @@
 # Change log
 
+## 0.6.2+4
+
+* Fix issues in older versions of android
+* Return not supported error for Android 8 or older that do not have biometric hardware
+
 ## 0.6.2+3
 
 * Failover to device credentials only if biometrics are not available
