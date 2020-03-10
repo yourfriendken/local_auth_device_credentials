@@ -115,8 +115,17 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
     authInProgress.set(true);
     BiometricManager biometricManager = BiometricManager.from(activity.getBaseContext());
     boolean canUseBiometric = biometricManager.canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS;
-    boolean failOverToDeviceAuth = call.method.equals("authenticate") && !canUseBiometric;
-    
+    // hack: avoiding device credentials weirdness with older version
+    boolean canSupportFailOver = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P;
+    boolean failOverToDeviceAuth = call.method.equals("authenticate") && !canUseBiometric && canSupportFailOver;
+
+    // hack: device cannot use biometrics or fail over to device credentials
+    if(!(canSupportFailOver || canUseBiometric)){
+      result.error("NotAvailable", "Device not supported", null);
+      authInProgress.set(false);
+      return;
+    }
+
     authenticationHelper =
         new AuthenticationHelper(
             lifecycle,

@@ -120,9 +120,7 @@ class AuthenticationHelper extends BiometricPrompt.AuthenticationCallback
       activity.getApplication().registerActivityLifecycleCallbacks(this);
     }
     biometricPrompt = new BiometricPrompt(activity, uiThreadExecutor, this);
-
     biometricPrompt.authenticate(promptInfo);
-
   }
 
   /** Cancels the fingerprint authentication. */
@@ -147,10 +145,13 @@ class AuthenticationHelper extends BiometricPrompt.AuthenticationCallback
   public void onAuthenticationError(int errorCode, CharSequence errString) {
     switch (errorCode) {
       case BiometricPrompt.ERROR_NO_DEVICE_CREDENTIAL:
-        showGoToSettingsDialog(
-          "Device credentials required", 
-          "Device credentials security does not appear to be set up. Go to \'Settings > Security\' to add credentials.");
-        return;
+        if (call.argument("useErrorDialogs")) {
+          showGoToSettingsDialog(
+              "Device credentials required",
+              "Device credentials security does not appear to be set up. Go to \'Settings > Security\' to add credentials.");
+          return;
+        }
+        completionHandler.onError("NotAvailable", "Security credentials not available.");
       case BiometricPrompt.ERROR_NO_SPACE:
       case BiometricPrompt.ERROR_NO_BIOMETRICS:
         if (call.argument("useErrorDialogs")) {
@@ -161,7 +162,7 @@ class AuthenticationHelper extends BiometricPrompt.AuthenticationCallback
         break;
       case BiometricPrompt.ERROR_HW_UNAVAILABLE:
       case BiometricPrompt.ERROR_HW_NOT_PRESENT:
-        completionHandler.onError("NotAvailable", "Biometrics is not available on this device.");
+        completionHandler.onError("NotAvailable", "Security credentials not available.");
         break;
       case BiometricPrompt.ERROR_LOCKOUT:
         completionHandler.onError(
@@ -235,9 +236,12 @@ class AuthenticationHelper extends BiometricPrompt.AuthenticationCallback
     onActivityResumed(null);
   }
 
+  //hack: dialog opens twice on Android 8
+  private boolean isSettingsDialogOpen = false;
   // Suppress inflateParams lint because dialogs do not need to attach to a parent view.
   @SuppressLint("InflateParams")
   private void showGoToSettingsDialog(String title, String descriptionText) {
+    if(isSettingsDialogOpen) return;
     View view = LayoutInflater.from(activity).inflate(R.layout.go_to_setting, null, false);
     TextView message = (TextView) view.findViewById(R.id.fingerprint_required);
     TextView description = (TextView) view.findViewById(R.id.go_to_setting_description);
@@ -248,6 +252,7 @@ class AuthenticationHelper extends BiometricPrompt.AuthenticationCallback
         new OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
+            isSettingsDialogOpen = false;
             completionHandler.onFailure();
             stop();
             activity.startActivity(new Intent(Settings.ACTION_SECURITY_SETTINGS));
@@ -257,10 +262,12 @@ class AuthenticationHelper extends BiometricPrompt.AuthenticationCallback
         new OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
+            isSettingsDialogOpen = false;
             completionHandler.onFailure();
             stop();
           }
         };
+    isSettingsDialogOpen = true;
     new AlertDialog.Builder(context)
         .setView(view)
         .setPositiveButton((String) call.argument("goToSetting"), goToSettingHandler)
