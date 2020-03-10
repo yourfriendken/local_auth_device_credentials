@@ -3,7 +3,7 @@
 ## 0.6.2+3
 
 * Failover to device credentials only if biometrics are not available
-  * This is awork around for <https://issuetracker.google.com/issues/142740104>
+  * This is a work around for <https://issuetracker.google.com/issues/142740104>
 
 ## 0.6.2+2
 
