@@ -4,7 +4,7 @@ This is a fork of the [local_auth](https://github.com/flutter/plugins/tree/maste
 
 There is an open [Pull Request](https://github.com/flutter/plugins/pull/2489) to merge into bases local_auth package.
 
-Addresses issue: [https://github.com/flutter/flutter/issues/49703]
+Addresses issue: [#49703](https://github.com/flutter/flutter/issues/49703)
 
 ## Device credentails
 
