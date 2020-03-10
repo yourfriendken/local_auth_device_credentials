@@ -7,6 +7,8 @@ package io.flutter.plugins.localauth;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Build;
+
+import androidx.biometric.BiometricManager;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Lifecycle;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
@@ -111,7 +113,10 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
     }
 
     authInProgress.set(true);
-    boolean failOverToDeviceAuth = call.method.equals("authenticate");
+    BiometricManager biometricManager = BiometricManager.from(activity.getBaseContext());
+    boolean canUseBiometric = biometricManager.canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS;
+    boolean failOverToDeviceAuth = call.method.equals("authenticate") && !canUseBiometric;
+    
     authenticationHelper =
         new AuthenticationHelper(
             lifecycle,

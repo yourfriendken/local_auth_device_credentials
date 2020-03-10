@@ -1,4 +1,4 @@
-# local_auth
+# local_auth with device credential option
 
 This is a fork of the [local_auth](https://github.com/flutter/plugins/tree/master/packages/local_auth)
 
@@ -11,3 +11,12 @@ Addresses issue: [https://github.com/flutter/flutter/issues/49703]
 The original plugin only supports biometric authentication. This package add a method that allows for device credentials if biometric authentication is not available.
 
 `localAuth.authenticate()` behaves the same as the original plugin's `localAuth.authenticateWithBiometrics()` but also allows device credentials (pin, pattern, passcode) to be use.
+
+```dart
+final LocalAuthentication auth = LocalAuthentication();
+
+authenticated = await auth.authenticate(
+    localizedReason: 'Let OS determine authentication method',
+    useErrorDialogs: true,
+    stickyAuth: true);
+```
