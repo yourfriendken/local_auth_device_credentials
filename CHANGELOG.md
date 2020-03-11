@@ -1,5 +1,9 @@
 # Change log
 
+## 0.6.3+2
+
+* Bug fix: set Android variable authInProgress to false when authentication cancelled
+
 ## 0.6.3+1
 
 * Handle `.isDeviceSupported()` on ios (always true)
