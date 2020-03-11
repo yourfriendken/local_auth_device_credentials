@@ -116,6 +116,7 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
     }
     
     if (!isDeviceSupported()) {
+      authInProgress.set(false);
       result.error("NotAvailable", "Device not supported", null);
       return;
     }
@@ -165,6 +166,7 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
   private void stopAuthentication(final Result result) {
     try {
       if (authenticationHelper != null && authInProgress.get()) {
+        authInProgress.set(false);
         authenticationHelper.stopAuthentication();
         authenticationHelper = null;
         result.success(true);

@@ -30,7 +30,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    auth.isDeviceSupported().then((isSupported) => setState(()=>_isSupported = isSupported));
+    auth.isDeviceSupported().then((isSupported) => setState(() => _isSupported = isSupported));
   }
 
   Future<void> _checkBiometrics() async {
@@ -68,7 +68,11 @@ class _MyAppState extends State<MyApp> {
         _isAuthenticating = true;
         _authorized = 'Authenticating';
       });
-      authenticated = await auth.authenticate(localizedReason: 'Let OS determine authentication method', useErrorDialogs: true, stickyAuth: true);
+      authenticated = await auth.authenticate(
+        localizedReason: 'Let OS determine authentication method',
+        useErrorDialogs: true,
+        stickyAuth: true,
+      );
       setState(() => _authorized = authenticated ? 'Authorized' : 'Not Authorized');
     } on PlatformException catch (e) {
       setState(() => _authorized = e.message);
@@ -114,9 +118,7 @@ class _MyAppState extends State<MyApp> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (_isSupported == null) CircularProgressIndicator() 
-                else if (_isSupported) Text("This device is supported") 
-                else Text("This device is not supported"),
+                if (_isSupported == null) CircularProgressIndicator() else if (_isSupported) Text("This device is supported") else Text("This device is not supported"),
                 Divider(height: 100),
                 Text('Can check biometrics: $_canCheckBiometrics\n'),
                 RaisedButton(
