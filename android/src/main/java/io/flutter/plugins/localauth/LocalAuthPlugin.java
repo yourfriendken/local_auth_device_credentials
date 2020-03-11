@@ -48,8 +48,8 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
    * initialized this way won't react to changes in activity or context.
    *
    * @param registrar attaches this plugin's {@link
-   *     io.flutter.plugin.common.MethodChannel.MethodCallHandler} to the registrar's {@link
-   *     io.flutter.plugin.common.BinaryMessenger}.
+   *                  io.flutter.plugin.common.MethodChannel.MethodCallHandler} to the registrar's {@link
+   *                  io.flutter.plugin.common.BinaryMessenger}.
    */
   public static void registerWith(Registrar registrar) {
     final MethodChannel channel = new MethodChannel(registrar.messenger(), CHANNEL_NAME);
@@ -76,6 +76,9 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
         break;
       case "getAvailableBiometrics":
         this.getAvailableBiometrics(result);
+        break;
+      case "isDeviceSupported":
+        this.isDeviceSupported(result);
         break;
       case "stopAuthentication":
         this.stopAuthentication(result);
@@ -111,6 +114,11 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
           null);
       return;
     }
+    
+    if (!isDeviceSupported()) {
+      result.error("NotAvailable", "Device not supported", null);
+      return;
+    }
 
     authInProgress.set(true);
     BiometricManager biometricManager = BiometricManager.from(activity.getBaseContext());
@@ -119,12 +127,7 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
     boolean canSupportFailOver = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P;
     boolean failOverToDeviceAuth = call.method.equals("authenticate") && !canUseBiometric && canSupportFailOver;
 
-    // hack: device cannot use biometrics or fail over to device credentials
-    if(!(canSupportFailOver || canUseBiometric)){
-      result.error("NotAvailable", "Device not supported", null);
-      authInProgress.set(false);
-      return;
-    }
+
 
     authenticationHelper =
         new AuthenticationHelper(
@@ -202,6 +205,22 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
       result.error("no_biometrics_available", e.getMessage(), null);
     }
   }
+
+  private boolean isDeviceSupported(){
+    // Allow device credentials flag only appears to work on API 28 or greater
+    boolean supportsDeviceCredentials = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P;
+
+    // Only fingerprint is available before API 29
+    PackageManager packageManager = activity.getPackageManager();
+    boolean hasFingerPrintReader = packageManager.hasSystemFeature(PackageManager.FEATURE_FINGERPRINT);
+
+    return hasFingerPrintReader || supportsDeviceCredentials;
+  }
+
+  private void isDeviceSupported(Result result) {
+    result.success(isDeviceSupported());
+  }
+
 
   @Override
   public void onAttachedToEngine(FlutterPluginBinding binding) {

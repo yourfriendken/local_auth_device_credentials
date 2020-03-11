@@ -25,6 +25,12 @@ class _MyAppState extends State<MyApp> {
   List<BiometricType> _availableBiometrics;
   String _authorized = 'Not Authorized';
   bool _isAuthenticating = false;
+  bool _isSupported = null;
+
+  @override
+  void initState() {
+    auth.isDeviceSupported().then((isSupported) => setState(()=>_isSupported = isSupported));
+  }
 
   Future<void> _checkBiometrics() async {
     bool canCheckBiometrics;
@@ -102,11 +108,15 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: ListView(
-          padding: const EdgeInsets.only(top: 30),
+          padding: const EdgeInsets.symmetric(vertical: 30),
           children: [
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                if (_isSupported == null) CircularProgressIndicator() 
+                else if (_isSupported) Text("This device is supported") 
+                else Text("This device is not supported"),
+                Divider(height: 100),
                 Text('Can check biometrics: $_canCheckBiometrics\n'),
                 RaisedButton(
                   child: const Text('Check biometrics'),

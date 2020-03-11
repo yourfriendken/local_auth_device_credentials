@@ -1,5 +1,11 @@
 # Change log
 
+## 0.6.3
+
+* Add method `.isDeviceSupported()` to determine if device is supported.
+  * Supports Android 9.0 or higher
+  * Supports below Android 9.0 only if fingerprint reader hardware available
+
 ## 0.6.2+4
 
 * Fix issues in older versions of android
