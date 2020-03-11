@@ -25,10 +25,11 @@ class _MyAppState extends State<MyApp> {
   List<BiometricType> _availableBiometrics;
   String _authorized = 'Not Authorized';
   bool _isAuthenticating = false;
-  bool _isSupported = null;
+  bool _isSupported;
 
   @override
   void initState() {
+    super.initState();
     auth.isDeviceSupported().then((isSupported) => setState(()=>_isSupported = isSupported));
   }
 
