@@ -1,5 +1,9 @@
 # Change log
 
+## 0.6.3+1
+
+* Handle `.isDeviceSupported()` on ios (always true)
+
 ## 0.6.3
 
 * Add method `.isDeviceSupported()` to determine if device is supported.
