@@ -96,6 +96,7 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
 
   private LocalAuthPlugin(Registrar registrar) {
     this.registrar = registrar;
+    this.registrar.addActivityResultListener(resultListener);
   }
 
   @Override
