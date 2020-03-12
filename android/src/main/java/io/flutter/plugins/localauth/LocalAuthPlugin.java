@@ -100,7 +100,7 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
         this.isDeviceSupported(result);
         break;
       case "stopAuthentication":
-        this.stopAuthentication(result);
+        this.stopAuthentication();
         break;
       default:
         result.notImplemented();
@@ -209,16 +209,15 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
   /*
    * Stops the authentication if in progress.
    */
-  private void stopAuthentication(final Result result) {
+  private void stopAuthentication() {
     try {
       if (authHelper != null && authInProgress.get()) {
-        authInProgress.set(false);
         authHelper.stopAuthentication();
         authHelper = null;
-        result.success(true);
         return;
       }
-      result.success(false);
+      authInProgress.set(false);
+      result.success(true);
     } catch (Exception e) {
       result.success(false);
     }
@@ -288,10 +287,12 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
     binding.addActivityResultListener(new PluginRegistry.ActivityResultListener() {
       @Override
       public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-        boolean success = resultCode == RESULT_OK;
         if (requestCode == LOCK_REQUEST_CODE) {
-          authInProgress.set(false);
-          result.success(resultCode == RESULT_OK);
+          if (resultCode == RESULT_OK) {
+            authenticateSuccess();
+          } else {
+            authenticateFail();
+          }
         }
         return false;
       }
