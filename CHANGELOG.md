@@ -1,5 +1,9 @@
 # Change log
 
+## 0.6.3+5
+
+* Android: Use application context when creating intent
+
 ## 0.6.3+4
 
 * Cancel authentication even when biometric prompt not used
