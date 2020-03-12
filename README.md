@@ -12,11 +12,42 @@ The original plugin only supports biometric authentication. This package add a m
 
 `localAuth.authenticate()` behaves the same as the original plugin's `localAuth.authenticateWithBiometrics()` but also allows device credentials (pin, pattern, passcode) to be use.
 
+## Check if device supports
+
+```dart
+final LocalAuthentication auth = LocalAuthentication();
+
+// API 23 and up with security features enabled for Android
+// Any iOS device
+bool isSupported = await auth.isDeviceSupported();
+```
+
+## Authenticate by any means
+
 ```dart
 final LocalAuthentication auth = LocalAuthentication();
 
 authenticated = await auth.authenticate(
     localizedReason: 'Let OS determine authentication method',
+    useErrorDialogs: true,
+    stickyAuth: true);
+```
+
+## Check biometrics
+
+```dart
+final LocalAuthentication auth = LocalAuthentication();
+
+bool isBiometricsAvailable = await auth.canCheckBiometrics();
+```
+
+## Authenticate with only biometrics
+
+```dart
+final LocalAuthentication auth = LocalAuthentication();
+
+authenticated = await auth.authenticateWithBiometrics(
+    localizedReason: 'Biometrics only',
     useErrorDialogs: true,
     stickyAuth: true);
 ```
