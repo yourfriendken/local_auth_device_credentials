@@ -1,5 +1,10 @@
 # Change log
 
+## 0.6.3+3
+
+* Handles authentication for API 23 and up
+* Returns unsupported status if device is using API 22 or below
+
 ## 0.6.3+2
 
 * Bug fix: set Android variable authInProgress to false when authentication cancelled
