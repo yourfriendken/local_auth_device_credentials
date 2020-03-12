@@ -1,5 +1,9 @@
 # Change log
 
+## 0.6.3+4
+
+* Cancel authentication even when biometric prompt not used
+
 ## 0.6.3+3
 
 * Handles authentication for API 23 and up
