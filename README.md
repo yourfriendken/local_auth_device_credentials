@@ -6,7 +6,7 @@ There is an open [Pull Request](https://github.com/flutter/plugins/pull/2489) to
 
 Addresses issue: [#49703](https://github.com/flutter/flutter/issues/49703)
 
-## Device credentails
+## Device credentials
 
 The original plugin only supports biometric authentication. This package add a method that allows for device credentials if biometric authentication is not available.
 
