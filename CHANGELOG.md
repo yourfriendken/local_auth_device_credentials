@@ -1,5 +1,9 @@
 # Change log
 
+## 0.6.3+7
+
+* Android: Add `getActivity()` method to avoid null error
+
 ## 0.6.3+6
 
 * Android: Use binding to fetch current activity
