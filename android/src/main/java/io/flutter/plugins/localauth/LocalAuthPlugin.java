@@ -45,7 +45,8 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
   private static final String CHANNEL_NAME = "plugins.flutter.io/local_auth";
   private static final int LOCK_REQUEST_CODE = 221;
 
-  private Activity activity;
+  private ActivityPluginBinding activityPluginBinding;
+  //  private Activity activity;
   private final AtomicBoolean authInProgress = new AtomicBoolean(false);
   private AuthenticationHelper authHelper;
 
@@ -69,11 +70,9 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
    */
   public static void registerWith(Registrar registrar) {
     final MethodChannel channel = new MethodChannel(registrar.messenger(), CHANNEL_NAME);
-    channel.setMethodCallHandler(new LocalAuthPlugin(registrar.activity()));
-  }
+    channel.setMethodCallHandler(new LocalAuthPlugin());
 
-  private LocalAuthPlugin(Activity activity) {
-    this.activity = activity;
+    //registrar.activity()
   }
 
   /**
@@ -116,6 +115,8 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
       result.error("auth_in_progress", "Authentication in progress", null);
       return;
     }
+
+    Activity activity = activityPluginBinding.getActivity();
 
     if (activity == null || activity.isFinishing()) {
       result.error("no_activity", "local_auth plugin requires a foreground activity", null);
@@ -228,6 +229,7 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
    */
   private void getAvailableBiometrics(final Result result) {
     try {
+      Activity activity = activityPluginBinding.getActivity();
       if (activity == null || activity.isFinishing()) {
         result.error("no_activity", "local_auth plugin requires a foreground activity", null);
         return;
@@ -241,6 +243,7 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
 
   private ArrayList<String> getAvailableBiometrics() {
     ArrayList<String> biometrics = new ArrayList<String>();
+    Activity activity = activityPluginBinding.getActivity();
     if (activity == null || activity.isFinishing()) {
       return biometrics;
     }
@@ -264,7 +267,7 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
   }
 
   private boolean isDeviceSupported() {
-    KeyguardManager keyguardManager = (KeyguardManager) activity.getBaseContext().getSystemService(KEYGUARD_SERVICE);
+    KeyguardManager keyguardManager = (KeyguardManager) activityPluginBinding.getActivity().getBaseContext().getSystemService(KEYGUARD_SERVICE);
     return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && keyguardManager.isDeviceSecure());
   }
 
@@ -281,7 +284,7 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
   public void onDetachedFromEngine(FlutterPluginBinding binding) {
   }
 
-  PluginRegistry.ActivityResultListener resultListener = new PluginRegistry.ActivityResultListener() {
+  final PluginRegistry.ActivityResultListener resultListener = new PluginRegistry.ActivityResultListener() {
     @Override
     public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
       if (requestCode == LOCK_REQUEST_CODE) {
@@ -297,7 +300,7 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
 
   @Override
   public void onAttachedToActivity(ActivityPluginBinding binding) {
-    activity = binding.getActivity();
+    activityPluginBinding = binding;
     binding.addActivityResultListener(resultListener);
     lifecycle = FlutterLifecycleAdapter.getActivityLifecycle(binding);
     channel.setMethodCallHandler(this);
@@ -306,19 +309,19 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
   @Override
   public void onDetachedFromActivityForConfigChanges() {
     lifecycle = null;
-    activity = null;
+    activityPluginBinding = null;
   }
 
   @Override
   public void onReattachedToActivityForConfigChanges(ActivityPluginBinding binding) {
-    activity = binding.getActivity();
+    activityPluginBinding = binding;
     binding.addActivityResultListener(resultListener);
     lifecycle = FlutterLifecycleAdapter.getActivityLifecycle(binding);
   }
 
   @Override
   public void onDetachedFromActivity() {
-    activity = null;
+    activityPluginBinding = null;
     lifecycle = null;
     channel.setMethodCallHandler(null);
   }
