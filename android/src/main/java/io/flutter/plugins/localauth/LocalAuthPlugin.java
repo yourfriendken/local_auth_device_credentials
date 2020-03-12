@@ -46,7 +46,18 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
   private static final int LOCK_REQUEST_CODE = 221;
 
   private ActivityPluginBinding activityPluginBinding;
-  //  private Activity activity;
+  private Registrar registrar;
+
+  private Activity getActivity() {
+    if (activityPluginBinding != null) {
+      return activityPluginBinding.getActivity();
+    }
+    if (registrar != null) {
+      return registrar.activity();
+    }
+    return null;
+  }
+
   private final AtomicBoolean authInProgress = new AtomicBoolean(false);
   private AuthenticationHelper authHelper;
 
@@ -70,9 +81,8 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
    */
   public static void registerWith(Registrar registrar) {
     final MethodChannel channel = new MethodChannel(registrar.messenger(), CHANNEL_NAME);
-    channel.setMethodCallHandler(new LocalAuthPlugin());
+    channel.setMethodCallHandler(new LocalAuthPlugin(registrar));
 
-    //registrar.activity()
   }
 
   /**
@@ -82,6 +92,10 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
    * Use this constructor when adding this plugin to an app with v2 embedding.
    */
   public LocalAuthPlugin() {
+  }
+
+  private LocalAuthPlugin(Registrar registrar) {
+    this.registrar = registrar;
   }
 
   @Override
@@ -116,7 +130,7 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
       return;
     }
 
-    Activity activity = activityPluginBinding.getActivity();
+    Activity activity = getActivity();
 
     if (activity == null || activity.isFinishing()) {
       result.error("no_activity", "local_auth plugin requires a foreground activity", null);
@@ -229,7 +243,7 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
    */
   private void getAvailableBiometrics(final Result result) {
     try {
-      Activity activity = activityPluginBinding.getActivity();
+      Activity activity = getActivity();
       if (activity == null || activity.isFinishing()) {
         result.error("no_activity", "local_auth plugin requires a foreground activity", null);
         return;
@@ -243,7 +257,7 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
 
   private ArrayList<String> getAvailableBiometrics() {
     ArrayList<String> biometrics = new ArrayList<String>();
-    Activity activity = activityPluginBinding.getActivity();
+    Activity activity = getActivity();
     if (activity == null || activity.isFinishing()) {
       return biometrics;
     }
@@ -267,7 +281,7 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
   }
 
   private boolean isDeviceSupported() {
-    KeyguardManager keyguardManager = (KeyguardManager) activityPluginBinding.getActivity().getBaseContext().getSystemService(KEYGUARD_SERVICE);
+    KeyguardManager keyguardManager = (KeyguardManager) getActivity().getBaseContext().getSystemService(KEYGUARD_SERVICE);
     return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && keyguardManager.isDeviceSecure());
   }
 
