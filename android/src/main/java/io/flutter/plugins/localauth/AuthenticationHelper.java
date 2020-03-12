@@ -76,7 +76,6 @@ class AuthenticationHelper extends BiometricPrompt.AuthenticationCallback
   private boolean activityPaused = false;
   private BiometricPrompt biometricPrompt;
 
-  @RequiresApi(api = Build.VERSION_CODES.M)
   AuthenticationHelper(
       Lifecycle lifecycle,
       FragmentActivity activity,
@@ -154,6 +153,7 @@ class AuthenticationHelper extends BiometricPrompt.AuthenticationCallback
         completionHandler.onError("NotAvailable", "Security credentials not available.");
       case BiometricPrompt.ERROR_NO_SPACE:
       case BiometricPrompt.ERROR_NO_BIOMETRICS:
+        if(promptInfo.isDeviceCredentialAllowed())return;
         if (call.argument("useErrorDialogs")) {
           showGoToSettingsDialog((String) call.argument("fingerprintRequired"), (String) call.argument("goToSettingDescription"));
           return;
