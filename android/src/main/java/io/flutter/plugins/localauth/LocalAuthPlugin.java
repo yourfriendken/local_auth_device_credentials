@@ -166,7 +166,7 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
       return;
     }
 
-    Context context = activity.getBaseContext();
+    Context context = activity.getApplicationContext();
 
     // API 23 - 28 with fingerprint
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -281,22 +281,24 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
   public void onDetachedFromEngine(FlutterPluginBinding binding) {
   }
 
+  PluginRegistry.ActivityResultListener resultListener = new PluginRegistry.ActivityResultListener() {
+    @Override
+    public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+      if (requestCode == LOCK_REQUEST_CODE) {
+        if (resultCode == RESULT_OK) {
+          authenticateSuccess();
+        } else {
+          authenticateFail();
+        }
+      }
+      return false;
+    }
+  };
+
   @Override
   public void onAttachedToActivity(ActivityPluginBinding binding) {
     activity = binding.getActivity();
-    binding.addActivityResultListener(new PluginRegistry.ActivityResultListener() {
-      @Override
-      public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == LOCK_REQUEST_CODE) {
-          if (resultCode == RESULT_OK) {
-            authenticateSuccess();
-          } else {
-            authenticateFail();
-          }
-        }
-        return false;
-      }
-    });
+    binding.addActivityResultListener(resultListener);
     lifecycle = FlutterLifecycleAdapter.getActivityLifecycle(binding);
     channel.setMethodCallHandler(this);
   }
@@ -310,6 +312,7 @@ public class LocalAuthPlugin implements MethodCallHandler, FlutterPlugin, Activi
   @Override
   public void onReattachedToActivityForConfigChanges(ActivityPluginBinding binding) {
     activity = binding.getActivity();
+    binding.addActivityResultListener(resultListener);
     lifecycle = FlutterLifecycleAdapter.getActivityLifecycle(binding);
   }
 
