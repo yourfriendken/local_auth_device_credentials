@@ -184,13 +184,12 @@ class LocalAuthentication {
       (await _channel.invokeListMethod<String>('getAvailableBiometrics'))
           .isNotEmpty;
 
-
   /// Returns true if device is capable of checking biometrics or is able to
   /// fail over to device credentials.
   ///
   /// Returns a [Future] bool true or false:
-  Future<bool> isDeviceSupported() => _channel.invokeMethod<bool>('isDeviceSupported');
-
+  Future<bool> isDeviceSupported() =>
+      _channel.invokeMethod<bool>('isDeviceSupported');
 
   /// Returns a list of enrolled biometrics
   ///

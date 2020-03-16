@@ -30,7 +30,9 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    auth.isDeviceSupported().then((isSupported) => setState(() => _isSupported = isSupported));
+    auth.isDeviceSupported().then(
+          (isSupported) => setState(() => _isSupported = isSupported),
+        );
   }
 
   Future<void> _checkBiometrics() async {
@@ -88,7 +90,11 @@ class _MyAppState extends State<MyApp> {
         _isAuthenticating = true;
         _authorized = 'Authenticating';
       });
-      authenticated = await auth.authenticateWithBiometrics(localizedReason: 'Scan your fingerprint to authenticate', useErrorDialogs: true, stickyAuth: true);
+      authenticated = await auth.authenticateWithBiometrics(
+        localizedReason: 'Scan your fingerprint to authenticate',
+        useErrorDialogs: true,
+        stickyAuth: true,
+      );
       setState(() {
         _isAuthenticating = false;
         _authorized = authenticated ? 'Authorized' : 'Not Authorized';
@@ -133,46 +139,41 @@ class _MyAppState extends State<MyApp> {
                 ),
                 Divider(height: 100),
                 Text('Current State: $_authorized\n'),
-                Visibility(
-                  visible: !_isAuthenticating,
-                  child: Column(
-                    children: [
-                      RaisedButton(
+                (_isAuthenticating)
+                    ? RaisedButton(
+                        onPressed: _cancelAuthentication,
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text('Authenticate'),
-                            Icon(Icons.perm_device_information),
+                            Text("Cancel Authentication"),
+                            Icon(Icons.cancel),
                           ],
                         ),
-                        onPressed: _authenticate,
+                      )
+                    : Column(
+                        children: [
+                          RaisedButton(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text('Authenticate'),
+                                Icon(Icons.perm_device_information),
+                              ],
+                            ),
+                            onPressed: _authenticate,
+                          ),
+                          RaisedButton(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(_isAuthenticating ? 'Cancel' : 'Authenticate: biometrics only'),
+                                Icon(Icons.fingerprint),
+                              ],
+                            ),
+                            onPressed: _authenticateWithBiometrics,
+                          ),
+                        ],
                       ),
-                      RaisedButton(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(_isAuthenticating ? 'Cancel' : 'Authenticate: biometrics only'),
-                            Icon(Icons.fingerprint),
-                          ],
-                        ),
-                        onPressed: _authenticateWithBiometrics,
-                      ),
-                    ],
-                  ),
-                ),
-                Visibility(
-                  visible: _isAuthenticating,
-                  child: RaisedButton(
-                    onPressed: _cancelAuthentication,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text("Cancel Authentication"),
-                        Icon(Icons.cancel),
-                      ],
-                    ),
-                  ),
-                ),
               ],
             ),
           ],
