@@ -91,7 +91,7 @@ class _MyAppState extends State<MyApp> {
         _authorized = 'Authenticating';
       });
       authenticated = await auth.authenticateWithBiometrics(
-        localizedReason: 'Scan your fingerprint to authenticate',
+        localizedReason: 'Use biometrics to authenticate',
         useErrorDialogs: true,
         stickyAuth: true,
       );
@@ -167,7 +167,7 @@ class _MyAppState extends State<MyApp> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(_isAuthenticating ? 'Cancel' : 'Authenticate: biometrics only'),
-                                Icon(Icons.fingerprint),
+                                Icon(Icons.person_pin),
                               ],
                             ),
                             onPressed: _authenticateWithBiometrics,

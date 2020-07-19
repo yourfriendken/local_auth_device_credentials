@@ -34,7 +34,7 @@ import java.util.concurrent.Executor;
 import static android.content.Context.KEYGUARD_SERVICE;
 
 /**
- * Authenticates the user with fingerprint and sends corresponding response back to Flutter.
+ * Authenticates the user with biometrics and sends corresponding response back to Flutter.
  *
  * <p>One instance per call is generated to ensure readable separation of executable paths across
  * method calls.
@@ -94,7 +94,7 @@ class AuthenticationHelper extends BiometricPrompt.AuthenticationCallback
           new BiometricPrompt.PromptInfo.Builder()
               .setDescription((String) call.argument("localizedReason"))
               .setTitle((String) call.argument("signInTitle"))
-              .setSubtitle((String) call.argument("fingerprintHint"))
+              .setSubtitle((String) call.argument("biometricHint"))
               .setConfirmationRequired((Boolean) call.argument("sensitiveTransaction"))
               .setDeviceCredentialAllowed(true)
               .build();
@@ -104,14 +104,14 @@ class AuthenticationHelper extends BiometricPrompt.AuthenticationCallback
           new BiometricPrompt.PromptInfo.Builder()
               .setDescription((String) call.argument("localizedReason"))
               .setTitle((String) call.argument("signInTitle"))
-              .setSubtitle((String) call.argument("fingerprintHint"))
+              .setSubtitle((String) call.argument("biometricHint"))
               .setNegativeButtonText((String) call.argument("cancelButton"))
               .setConfirmationRequired((Boolean) call.argument("sensitiveTransaction"))
               .build();
     }
   }
 
-  /** Start the fingerprint listener. */
+  /** Start the biometric listener. */
   void authenticate() {
     if (lifecycle != null) {
       lifecycle.addObserver(this);
@@ -122,7 +122,7 @@ class AuthenticationHelper extends BiometricPrompt.AuthenticationCallback
     biometricPrompt.authenticate(promptInfo);
   }
 
-  /** Cancels the fingerprint authentication. */
+  /** Cancels the biometric authentication. */
   void stopAuthentication() {
     if (biometricPrompt != null) {
       biometricPrompt.cancelAuthentication();
@@ -130,7 +130,7 @@ class AuthenticationHelper extends BiometricPrompt.AuthenticationCallback
     }
   }
 
-  /** Stops the fingerprint listener. */
+  /** Stops the biometric listener. */
   private void stop() {
     if (lifecycle != null) {
       lifecycle.removeObserver(this);
@@ -155,7 +155,7 @@ class AuthenticationHelper extends BiometricPrompt.AuthenticationCallback
       case BiometricPrompt.ERROR_NO_BIOMETRICS:
         if(promptInfo.isDeviceCredentialAllowed())return;
         if (call.argument("useErrorDialogs")) {
-          showGoToSettingsDialog((String) call.argument("fingerprintRequired"), (String) call.argument("goToSettingDescription"));
+          showGoToSettingsDialog((String) call.argument("biometricRequired"), (String) call.argument("goToSettingDescription"));
           return;
         }
         completionHandler.onError("NotEnrolled", "No Biometrics enrolled on this device.");
@@ -199,7 +199,7 @@ class AuthenticationHelper extends BiometricPrompt.AuthenticationCallback
   public void onAuthenticationFailed() {}
 
   /**
-   * If the activity is paused, we keep track because fingerprint dialog simply returns "User
+   * If the activity is paused, we keep track because biometric dialog simply returns "User
    * cancelled" when the activity is paused.
    */
   @Override
@@ -216,13 +216,13 @@ class AuthenticationHelper extends BiometricPrompt.AuthenticationCallback
       final BiometricPrompt prompt = new BiometricPrompt(activity, uiThreadExecutor, this);
       // When activity is resuming, we cannot show the prompt right away. We need to post it to the
       // UI queue.
-      uiThreadExecutor.handler.post(
-          new Runnable() {
-            @Override
-            public void run() {
-              prompt.authenticate(promptInfo);
-            }
-          });
+     uiThreadExecutor.handler.post(
+         new Runnable() {
+           @Override
+           public void run() {
+             prompt.authenticate(promptInfo);
+           }
+         });
     }
   }
 
