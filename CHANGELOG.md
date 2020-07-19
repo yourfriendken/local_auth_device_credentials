@@ -1,5 +1,10 @@
 # Change log
 
+## 0.6.3+9
+
+* Android: Add checks for hardware and enrollment
+* Refactor fingerprint to more generic biometric
+
 ## 0.6.3+8
 
 * Android: Add result listener to registrar in constructor
