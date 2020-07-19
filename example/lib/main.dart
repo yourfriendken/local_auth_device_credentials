@@ -42,9 +42,7 @@ class _MyAppState extends State<MyApp> {
     }
     if (!mounted) return;
 
-    setState(() {
-      _canCheckBiometrics = canCheckBiometrics;
-    });
+    setState(() => _canCheckBiometrics = canCheckBiometrics);
   }
 
   Future<void> _getAvailableBiometrics() async {
@@ -56,9 +54,7 @@ class _MyAppState extends State<MyApp> {
     }
     if (!mounted) return;
 
-    setState(() {
-      _availableBiometrics = availableBiometrics;
-    });
+    setState(() => _availableBiometrics = availableBiometrics);
   }
 
   Future<void> _authenticate() async {
@@ -88,7 +84,11 @@ class _MyAppState extends State<MyApp> {
         _isAuthenticating = true;
         _authorized = 'Authenticating';
       });
-      authenticated = await auth.authenticateWithBiometrics(localizedReason: 'Scan your fingerprint to authenticate', useErrorDialogs: true, stickyAuth: true);
+      authenticated = await auth.authenticateWithBiometrics(
+        localizedReason: 'Use biometrics to authenticate',
+        useErrorDialogs: true,
+        stickyAuth: true,
+      );
       setState(() {
         _isAuthenticating = false;
         _authorized = authenticated ? 'Authorized' : 'Not Authorized';
@@ -118,7 +118,11 @@ class _MyAppState extends State<MyApp> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (_isSupported == null) CircularProgressIndicator() else if (_isSupported) Text("This device is supported") else Text("This device is not supported"),
+                (_isSupported == null) //
+                    ? CircularProgressIndicator()
+                    : (_isSupported) //
+                        ? Text("This device is supported")
+                        : Text("This device is not supported"),
                 Divider(height: 100),
                 Text('Can check biometrics: $_canCheckBiometrics\n'),
                 RaisedButton(
@@ -133,46 +137,41 @@ class _MyAppState extends State<MyApp> {
                 ),
                 Divider(height: 100),
                 Text('Current State: $_authorized\n'),
-                Visibility(
-                  visible: !_isAuthenticating,
-                  child: Column(
-                    children: [
-                      RaisedButton(
+                (_isAuthenticating)
+                    ? RaisedButton(
+                        onPressed: _cancelAuthentication,
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text('Authenticate'),
-                            Icon(Icons.perm_device_information),
+                            Text("Cancel Authentication"),
+                            Icon(Icons.cancel),
                           ],
                         ),
-                        onPressed: _authenticate,
+                      )
+                    : Column(
+                        children: [
+                          RaisedButton(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text('Authenticate'),
+                                Icon(Icons.perm_device_information),
+                              ],
+                            ),
+                            onPressed: _authenticate,
+                          ),
+                          RaisedButton(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(_isAuthenticating ? 'Cancel' : 'Authenticate: biometrics only'),
+                                Icon(Icons.person_pin),
+                              ],
+                            ),
+                            onPressed: _authenticateWithBiometrics,
+                          ),
+                        ],
                       ),
-                      RaisedButton(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(_isAuthenticating ? 'Cancel' : 'Authenticate: biometrics only'),
-                            Icon(Icons.fingerprint),
-                          ],
-                        ),
-                        onPressed: _authenticateWithBiometrics,
-                      ),
-                    ],
-                  ),
-                ),
-                Visibility(
-                  visible: _isAuthenticating,
-                  child: RaisedButton(
-                    onPressed: _cancelAuthentication,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text("Cancel Authentication"),
-                        Icon(Icons.cancel),
-                      ],
-                    ),
-                  ),
-                ),
               ],
             ),
           ],
