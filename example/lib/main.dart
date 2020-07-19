@@ -30,9 +30,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    auth.isDeviceSupported().then(
-          (isSupported) => setState(() => _isSupported = isSupported),
-        );
+    auth.isDeviceSupported().then((isSupported) => setState(() => _isSupported = isSupported));
   }
 
   Future<void> _checkBiometrics() async {
@@ -44,9 +42,7 @@ class _MyAppState extends State<MyApp> {
     }
     if (!mounted) return;
 
-    setState(() {
-      _canCheckBiometrics = canCheckBiometrics;
-    });
+    setState(() => _canCheckBiometrics = canCheckBiometrics);
   }
 
   Future<void> _getAvailableBiometrics() async {
@@ -58,9 +54,7 @@ class _MyAppState extends State<MyApp> {
     }
     if (!mounted) return;
 
-    setState(() {
-      _availableBiometrics = availableBiometrics;
-    });
+    setState(() => _availableBiometrics = availableBiometrics);
   }
 
   Future<void> _authenticate() async {
@@ -124,12 +118,11 @@ class _MyAppState extends State<MyApp> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (_isSupported == null)
-                  CircularProgressIndicator() //
-                else if (_isSupported == true)
-                  Text("This device is supported") //
-                else
-                  Text("This device is not supported"),
+                (_isSupported == null) //
+                    ? CircularProgressIndicator()
+                    : (_isSupported) //
+                        ? Text("This device is supported")
+                        : Text("This device is not supported"),
                 Divider(height: 100),
                 Text('Can check biometrics: $_canCheckBiometrics\n'),
                 RaisedButton(
