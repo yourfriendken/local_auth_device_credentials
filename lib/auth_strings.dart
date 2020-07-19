@@ -37,13 +37,16 @@ class AndroidAuthMessages {
   Map<String, String> get args {
     return <String, String>{
       'biometricHint': biometricHint ?? androidBiometricHint,
-      'biometricNotRecognized': biometricNotRecognized ?? androidBiometricNotRecognized,
+      'biometricNotRecognized':
+          biometricNotRecognized ?? androidBiometricNotRecognized,
       'biometricSuccess': biometricSuccess ?? androidBiometricSuccess,
       'cancelButton': cancelButton ?? androidCancelButton,
       'signInTitle': signInTitle ?? androidSignInTitle,
-      'biometricRequired': biometricRequiredTitle ?? androidBiometricRequiredTitle,
+      'biometricRequired':
+          biometricRequiredTitle ?? androidBiometricRequiredTitle,
       'goToSetting': goToSettingsButton ?? goToSettings,
-      'goToSettingDescription': goToSettingsDescription ?? androidGoToSettingsDescription,
+      'goToSettingDescription':
+          goToSettingsDescription ?? androidGoToSettingsDescription,
     };
   }
 }
@@ -68,7 +71,8 @@ class IOSAuthMessages {
     return <String, String>{
       'lockOut': lockOut ?? iOSLockOut,
       'goToSetting': goToSettingsButton ?? goToSettings,
-      'goToSettingDescriptionIOS': goToSettingsDescription ?? iOSGoToSettingsDescription,
+      'goToSettingDescriptionIOS':
+          goToSettingsDescription ?? iOSGoToSettingsDescription,
       'okButton': cancelButton ?? iOSOkButton,
     };
   }
@@ -77,12 +81,14 @@ class IOSAuthMessages {
 // Strings for local_authentication plugin. Currently supports English.
 // Intl.message must be string literals.
 String get androidBiometricHint => Intl.message('Verify identity',
-    desc: 'Hint message advising the user how to authenticate with biometrics. It is '
+    desc:
+        'Hint message advising the user how to authenticate with biometrics. It is '
         'used on Android side. Maximum 60 characters.');
 
-String get androidBiometricNotRecognized => Intl.message('Not recognized. Try again.',
-    desc: 'Message to let the user know that authentication was failed. It '
-        'is used on Android side. Maximum 60 characters.');
+String get androidBiometricNotRecognized =>
+    Intl.message('Not recognized. Try again.',
+        desc: 'Message to let the user know that authentication was failed. It '
+            'is used on Android side. Maximum 60 characters.');
 
 String get androidBiometricSuccess => Intl.message('Success',
     desc: 'Message to let the user know that authentication was successful. It '
@@ -118,13 +124,15 @@ String get androidGoToSettingsDescription => Intl.message(
 String get iOSLockOut => Intl.message(
     'Biometric authentication is disabled. Please lock and unlock your screen to '
     'enable it.',
-    desc: 'Message advising the user to re-enable biometrics on their device. It '
+    desc:
+        'Message advising the user to re-enable biometrics on their device. It '
         'shows in a dialog on iOS side.');
 
 String get iOSGoToSettingsDescription => Intl.message(
     'Biometric authentication is not set up on your device. Please either enable '
     'Touch ID or Face ID on your phone.',
-    desc: 'Message advising the user to go to the settings and configure Biometrics '
+    desc:
+        'Message advising the user to go to the settings and configure Biometrics '
         'for their device. It shows in a dialog on iOS side.');
 
 String get iOSOkButton => Intl.message('OK',

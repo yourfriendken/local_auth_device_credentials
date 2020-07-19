@@ -30,7 +30,9 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    auth.isDeviceSupported().then((isSupported) => setState(() => _isSupported = isSupported));
+    auth
+        .isDeviceSupported()
+        .then((isSupported) => setState(() => _isSupported = isSupported));
   }
 
   Future<void> _checkBiometrics() async {
@@ -69,7 +71,8 @@ class _MyAppState extends State<MyApp> {
         useErrorDialogs: true,
         stickyAuth: true,
       );
-      setState(() => _authorized = authenticated ? 'Authorized' : 'Not Authorized');
+      setState(
+          () => _authorized = authenticated ? 'Authorized' : 'Not Authorized');
     } on PlatformException catch (e) {
       setState(() => _authorized = e.message);
     } finally {
@@ -164,7 +167,9 @@ class _MyAppState extends State<MyApp> {
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text(_isAuthenticating ? 'Cancel' : 'Authenticate: biometrics only'),
+                                Text(_isAuthenticating
+                                    ? 'Cancel'
+                                    : 'Authenticate: biometrics only'),
                                 Icon(Icons.person_pin),
                               ],
                             ),
