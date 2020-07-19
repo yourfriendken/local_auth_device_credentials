@@ -124,7 +124,12 @@ class _MyAppState extends State<MyApp> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (_isSupported == null) CircularProgressIndicator() else if (_isSupported) Text("This device is supported") else Text("This device is not supported"),
+                if (_isSupported == null)
+                  CircularProgressIndicator() //
+                else if (_isSupported == true)
+                  Text("This device is supported") //
+                else
+                  Text("This device is not supported"),
                 Divider(height: 100),
                 Text('Can check biometrics: $_canCheckBiometrics\n'),
                 RaisedButton(
