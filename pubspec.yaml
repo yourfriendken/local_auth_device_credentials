@@ -19,7 +19,6 @@ dependencies:
     sdk: flutter
   meta: ^1.0.5
   intl: '>=0.15.1 <0.17.0'
-  platform: ^2.0.0
   flutter_plugin_android_lifecycle: ^1.0.2
 
 dev_dependencies:
