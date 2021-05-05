@@ -19,7 +19,7 @@ void main() {
     );
 
     final List<MethodCall> log = <MethodCall>[];
-    LocalAuthentication localAuthentication;
+    LocalAuthentication? localAuthentication;
 
     setUp(() {
       channel.setMockMethodCallHandler((MethodCall methodCall) {
@@ -33,7 +33,7 @@ void main() {
     group("With device auth fail over", () {
       test('authenticate with no args on Android.', () async {
         setMockPathProviderPlatform(FakePlatform(operatingSystem: 'android'));
-        await localAuthentication.authenticateWithBiometrics(
+        await localAuthentication?.authenticateWithBiometrics(
           localizedReason: 'Needs secure',
         );
         expect(
@@ -52,7 +52,7 @@ void main() {
 
       test('authenticate with no args on iOS.', () async {
         setMockPathProviderPlatform(FakePlatform(operatingSystem: 'ios'));
-        await localAuthentication.authenticateWithBiometrics(
+        await localAuthentication?.authenticateWithBiometrics(
           localizedReason: 'Needs secure',
         );
         expect(
@@ -71,7 +71,7 @@ void main() {
 
       test('authenticate with no sensitive transaction.', () async {
         setMockPathProviderPlatform(FakePlatform(operatingSystem: 'android'));
-        await localAuthentication.authenticateWithBiometrics(
+        await localAuthentication?.authenticateWithBiometrics(
           localizedReason: 'Insecure',
           sensitiveTransaction: false,
           useErrorDialogs: false,
@@ -94,7 +94,7 @@ void main() {
     group("With biometrics only", () {
       test('authenticate with no args on Android.', () async {
         setMockPathProviderPlatform(FakePlatform(operatingSystem: 'android'));
-        await localAuthentication.authenticate(
+        await localAuthentication?.authenticate(
           localizedReason: 'Needs secure',
         );
         expect(
@@ -113,7 +113,7 @@ void main() {
 
       test('authenticate with no args on iOS.', () async {
         setMockPathProviderPlatform(FakePlatform(operatingSystem: 'ios'));
-        await localAuthentication.authenticate(
+        await localAuthentication?.authenticate(
           localizedReason: 'Needs secure',
         );
         expect(
@@ -132,7 +132,7 @@ void main() {
 
       test('authenticate with no sensitive transaction.', () async {
         setMockPathProviderPlatform(FakePlatform(operatingSystem: 'android'));
-        await localAuthentication.authenticate(
+        await localAuthentication?.authenticate(
           localizedReason: 'Insecure',
           sensitiveTransaction: false,
           useErrorDialogs: false,

@@ -21,22 +21,20 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final LocalAuthentication auth = LocalAuthentication();
-  bool _canCheckBiometrics;
-  List<BiometricType> _availableBiometrics;
+  bool? _canCheckBiometrics;
+  List<BiometricType>? _availableBiometrics;
   String _authorized = 'Not Authorized';
   bool _isAuthenticating = false;
-  bool _isSupported;
+  bool? _isSupported;
 
   @override
   void initState() {
     super.initState();
-    auth
-        .isDeviceSupported()
-        .then((isSupported) => setState(() => _isSupported = isSupported));
+    auth.isDeviceSupported().then((isSupported) => setState(() => _isSupported = isSupported));
   }
 
   Future<void> _checkBiometrics() async {
-    bool canCheckBiometrics;
+    bool? canCheckBiometrics;
     try {
       canCheckBiometrics = await auth.canCheckBiometrics;
     } on PlatformException catch (e) {
@@ -48,7 +46,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _getAvailableBiometrics() async {
-    List<BiometricType> availableBiometrics;
+    List<BiometricType>? availableBiometrics;
     try {
       availableBiometrics = await auth.getAvailableBiometrics();
     } on PlatformException catch (e) {
@@ -71,10 +69,9 @@ class _MyAppState extends State<MyApp> {
         useErrorDialogs: true,
         stickyAuth: true,
       );
-      setState(
-          () => _authorized = authenticated ? 'Authorized' : 'Not Authorized');
+      setState(() => _authorized = authenticated ? 'Authorized' : 'Not Authorized');
     } on PlatformException catch (e) {
-      setState(() => _authorized = e.message);
+      setState(() => _authorized = e.message ?? "Error");
     } finally {
       setState(() => _isAuthenticating = false);
     }
@@ -97,7 +94,7 @@ class _MyAppState extends State<MyApp> {
         _authorized = authenticated ? 'Authorized' : 'Not Authorized';
       });
     } on PlatformException catch (e) {
-      setState(() => _authorized = e.message);
+      setState(() => _authorized = e.message ?? "Error");
     } finally {
       setState(() => _isAuthenticating = false);
     }
@@ -123,7 +120,7 @@ class _MyAppState extends State<MyApp> {
               children: [
                 (_isSupported == null) //
                     ? CircularProgressIndicator()
-                    : (_isSupported) //
+                    : (_isSupported ?? false) //
                         ? Text("This device is supported")
                         : Text("This device is not supported"),
                 Divider(height: 100),
@@ -167,9 +164,7 @@ class _MyAppState extends State<MyApp> {
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text(_isAuthenticating
-                                    ? 'Cancel'
-                                    : 'Authenticate: biometrics only'),
+                                Text(_isAuthenticating ? 'Cancel' : 'Authenticate: biometrics only'),
                                 Icon(Icons.person_pin),
                               ],
                             ),

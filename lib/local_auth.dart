@@ -67,7 +67,7 @@ class LocalAuthentication {
   /// [PlatformException] with error code [otherOperatingSystem] on the iOS
   /// simulator.
   Future<bool> authenticateWithBiometrics({
-    @required String localizedReason,
+    @required String? localizedReason,
     bool useErrorDialogs = true,
     bool stickyAuth = false,
     AndroidAuthMessages androidAuthStrings = const AndroidAuthMessages(),
@@ -75,7 +75,7 @@ class LocalAuthentication {
     bool sensitiveTransaction = true,
   }) async {
     assert(localizedReason != null);
-    final Map<String, Object> args = <String, Object>{
+    final Map<String, Object?> args = <String, Object?>{
       'localizedReason': localizedReason,
       'useErrorDialogs': useErrorDialogs,
       'stickyAuth': stickyAuth,
@@ -92,10 +92,7 @@ class LocalAuthentication {
               'operating systems.',
           details: 'Your operating system is ${_platform.operatingSystem}');
     }
-    return await _channel.invokeMethod<bool>(
-      'authenticateWithBiometrics',
-      args,
-    );
+    return await _channel.invokeMethod<bool>('authenticateWithBiometrics', args) ?? false;
   }
 
   /// Authenticates the user with biometrics available on the device while also
@@ -136,7 +133,7 @@ class LocalAuthentication {
   /// [PlatformException] with error code [otherOperatingSystem] on the iOS
   /// simulator.
   Future<bool> authenticate({
-    @required String localizedReason,
+    @required String? localizedReason,
     bool useErrorDialogs = true,
     bool stickyAuth = false,
     AndroidAuthMessages androidAuthStrings = const AndroidAuthMessages(),
@@ -144,7 +141,7 @@ class LocalAuthentication {
     bool sensitiveTransaction = true,
   }) async {
     assert(localizedReason != null);
-    final Map<String, Object> args = <String, Object>{
+    final Map<String, Object?> args = <String, Object?>{
       'localizedReason': localizedReason,
       'useErrorDialogs': useErrorDialogs,
       'stickyAuth': stickyAuth,
@@ -162,7 +159,7 @@ class LocalAuthentication {
         details: 'Your operating system is ${_platform.operatingSystem}',
       );
     }
-    return await _channel.invokeMethod<bool>('authenticate', args);
+    return await _channel.invokeMethod<bool>('authenticate', args) ?? false;
   }
 
   /// Returns true if auth was cancelled successfully.
@@ -170,9 +167,9 @@ class LocalAuthentication {
   /// Returns false if there was some error or no auth in progress.
   ///
   /// Returns [Future] bool true or false:
-  Future<bool> stopAuthentication() {
+  Future<bool> stopAuthentication() async {
     if (_platform.isAndroid) {
-      return _channel.invokeMethod<bool>('stopAuthentication');
+      return (await _channel.invokeMethod<bool>('stopAuthentication')) ?? false;
     }
     return Future<bool>.sync(() => true);
   }
@@ -180,16 +177,13 @@ class LocalAuthentication {
   /// Returns true if device is capable of checking biometrics
   ///
   /// Returns a [Future] bool true or false:
-  Future<bool> get canCheckBiometrics async =>
-      (await _channel.invokeListMethod<String>('getAvailableBiometrics'))
-          .isNotEmpty;
+  Future<bool> get canCheckBiometrics async => (await _channel.invokeListMethod<String>('getAvailableBiometrics'))?.isNotEmpty ?? false;
 
   /// Returns true if device is capable of checking biometrics or is able to
   /// fail over to device credentials.
   ///
   /// Returns a [Future] bool true or false:
-  Future<bool> isDeviceSupported() =>
-      _channel.invokeMethod<bool>('isDeviceSupported');
+  Future<bool> isDeviceSupported() async => (await _channel.invokeMethod<bool>('isDeviceSupported')) ?? false;
 
   /// Returns a list of enrolled biometrics
   ///
@@ -198,11 +192,11 @@ class LocalAuthentication {
   /// - BiometricType.fingerprint
   /// - BiometricType.iris (not yet implemented)
   Future<List<BiometricType>> getAvailableBiometrics() async {
-    final List<String> result = (await _channel.invokeListMethod<String>(
+    final List<String>? result = (await _channel.invokeListMethod<String>(
       'getAvailableBiometrics',
     ));
     final List<BiometricType> biometrics = <BiometricType>[];
-    result.forEach((String value) {
+    result?.forEach((String value) {
       switch (value) {
         case 'face':
           biometrics.add(BiometricType.face);
